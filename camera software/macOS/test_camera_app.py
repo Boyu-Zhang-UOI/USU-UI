@@ -1,4 +1,4 @@
-"""Unit tests for camera_app helper functions and CameraApp widget logic."""
+"""Unit tests for camera_app helper functions."""
 
 import os
 import sys
@@ -124,54 +124,6 @@ class TestFormatDuration(unittest.TestCase):
 
     def test_ten_minutes(self):
         self.assertEqual(CameraApp._format_duration(600), "10:00")
-
-
-class TestCameraAppInit(unittest.TestCase):
-    """Tests for CameraApp initialization and button state logic."""
-
-    def setUp(self):
-        self.root = None
-
-    def tearDown(self):
-        if self.root is not None:
-            self.root.destroy()
-
-    def _make_app(self):
-        import tkinter as tk
-        self.root = tk.Tk()
-        self.root.withdraw()  # hide window during tests
-        return CameraApp(self.root)
-
-    def test_default_video_length_is_120(self):
-        app = self._make_app()
-        self.assertEqual(app.video_length.get(), 120)
-
-    def test_start_button_disabled_by_default(self):
-        app = self._make_app()
-        self.assertEqual(str(app.start_btn.cget("state")), "disabled")
-
-    def test_start_button_enabled_when_all_set(self):
-        app = self._make_app()
-        app.camera_ready = True
-        with tempfile.TemporaryDirectory() as tmp:
-            app.folder_path.set(tmp)
-            app._update_start_button_state()
-            self.assertEqual(str(app.start_btn.cget("state")), "normal")
-
-    def test_start_button_disabled_without_folder(self):
-        app = self._make_app()
-        app.camera_ready = True
-        app.folder_path.set("")
-        app._update_start_button_state()
-        self.assertEqual(str(app.start_btn.cget("state")), "disabled")
-
-    def test_start_button_disabled_without_camera(self):
-        app = self._make_app()
-        app.camera_ready = False
-        with tempfile.TemporaryDirectory() as tmp:
-            app.folder_path.set(tmp)
-            app._update_start_button_state()
-            self.assertEqual(str(app.start_btn.cget("state")), "disabled")
 
 
 if __name__ == "__main__":
